@@ -1,8 +1,8 @@
 # SQL Query Builder
 
 A simple web application for building SQL queries with a user-friendly interface.
-![SS-c](ScreenshotCreate)
-![SS-s](ScreenshotSelect)
+![SS-c](ScreenshotCreate.png)
+![SS-s](ScreenshotSelect.png)
 ## Features
 
 - **Two Query Types**:
