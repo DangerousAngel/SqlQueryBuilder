@@ -5,10 +5,7 @@ A simple web application for building SQL queries with a user-friendly interface
 
 ![SS-c](ScreenShot.png)
 
-## Features
-
-- **Two Query Types**:
-## Features
+## Queries
 
 This application supports the generation of various SQL statement types, categorized into two main groups:
 
@@ -24,7 +21,7 @@ This application supports the generation of various SQL statement types, categor
 * UPDATE Query
 * DELETE Query
 
-
+## Features
 
 - **User-Friendly Interface**:
   - Clean, modern design with gradient colors
