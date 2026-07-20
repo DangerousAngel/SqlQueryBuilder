@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Builder - Advanced Query Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+<script type="text/javascript" src="https://me.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=6gnC2HpNQRYnitupktkFkuqwybO0CpCfTVA-eHmc3ZKkdE0AyDW89LQvx4uVjjs4UIkcl5-PgRkYa9oKBLPaWdnOTWv2NWPNYM_Uws0tV8joihDX7pet5a1FuOaOHRxQMr4SNqO40tmRRYB_LU_Me6OYiw3VEra_b9_GXN_lB2W8Y3n7MI5OZoMd6ATV326uWUXVq7FcMTdlNx6MwSYLj-wJyJ6EvkUQ951tQGvxxYlzuvyLIoiPC3kw0ZAsE0x4kIc5d8bzp_bQ30VlLsCbCtqvYaaFwVT9nevZ-11i8df6n4XqORh6lftToIWUGQb-jcobl-Qtr0AbZ-uLlbb0mvfxrWLtYe8bpb4Bms6ODsYADozG6J6LyIiSNEmbWYPWm470IrDhwtyRgOIIyjfr151KC2GDNFsgFT0hxi9N6z0rTY6p1B8xgbpz2Yj2AhSlWOeIa2v6ZgiEzO2VjdOqwNOFjWO0Ks-bMUu48oGjPz8axomsGcdp1c4eL5bWC9hym7Z_WCsC3hsx3YJ4brMLhVXg60uZ5qe6CFNMTpOlOqogoDhoB4yC-uUQhokAmULkyeQ0GIvjKmsgLYr1M6DOGetkaG_S22nVT1_JMEgmI_p90Iphbijf-1QZFQnpf0e4cqSBkYNmDMfIx-00AZqjHA" charset="UTF-8"></script></head>
+<body>
+    <div class="app-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-database"></i>
+                <h1>SQL BUILDER</h1>
+            </div>
+
+            <div class="sidebar-tabs">
+                <div class="sidebar-tab active" data-tab="ddl">DDL</div>
+                <div class="sidebar-tab" data-tab="dml">DML</div>
+            </div>
+
+            <ul class="query-types" id="ddl-queries">
+                <li class="query-type active" data-type="select">
+                    <i class="fas fa-search"></i>
+                    SELECT Query
+                </li>
+                <li class="query-type" data-type="create">
+                    <i class="fas fa-plus"></i>
+                    CREATE TABLE
+                </li>
+                <li class="query-type" data-type="alter">
+                    <i class="fas fa-wrench"></i>
+                    ALTER TABLE
+                </li>
+                <li class="query-type" data-type="view">
+                    <i class="fas fa-eye"></i>
+                    CREATE VIEW
+                </li>
+            </ul>
+
+            <ul class="query-types" id="dml-queries" style="display:none;">
+                <li class="query-type" data-type="insert">
+                    <i class="fas fa-plus-circle"></i>
+                    INSERT Query
+                </li>
+                <li class="query-type" data-type="update">
+                    <i class="fas fa-edit"></i>
+                    UPDATE Query
+                </li>
+                <li class="query-type" data-type="delete">
+                    <i class="fas fa-trash-alt"></i>
+                    DELETE Query
+                </li>
+            </ul>
+
+            <a href="https://linktr.ee/DangerousAngel" class="floating-btn">| ᕲΛNGΞROUS ΛNGΞL</a>
+        </div>
+
+        <div class="main-content">
+            <!-- SELECT Query Builder -->
+            <div class="query-builder active" id="select-query">
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-table"></i>
+                        <h3>Table Selection</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="select-database">Database</label>
+                        <input id="select-database" placeholder="Enter DataBase's Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="select-table">Table</label>
+                        <input id="select-table" placeholder="Enter table's Name">
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-columns"></i>
+                        <h3>Columns</h3>
+                        <div class="checkbox-group" style="margin-left:auto;">
+                            <input type="checkbox" id="distinct-check">
+                            <label for="distinct-check">DISTINCT</label>
+                        </div>
+                    </div>
+                    <div id="columns-container">
+                        <div class="column-row">
+                            <input class="column-select" placeholder="Enter column's Name">
+                            <input class="column-alias" placeholder="Alias (optional)" style="flex:1">
+                            <button class="remove-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    <button class="add-btn" id="add-column">
+                        <i class="fas fa-plus"></i> Add Column
+                    </button>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-link"></i>
+                        <h3>Joins</h3>
+                    </div>
+                    <div id="joins-container"></div>
+                    <button class="add-btn" id="add-join">
+                        <i class="fas fa-plus"></i> Add Join
+                    </button>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-filter"></i>
+                        <h3>Conditions</h3>
+                    </div>
+                    <div id="conditions-container">
+                        <div class="condition-row">
+                            <input class="condition-column" placeholder="Column's Name for Conditions">
+                            <select class="condition-operator">
+                                <option value="=">=</option>
+                                <option value="!=">!=</option>
+                                <option value="<">&lt;</option>
+                                <option value=">">&gt;</option>
+                                <option value="<=">&lt;=</option>
+                                <option value=">=">&gt;=</option>
+                                <option value="LIKE">LIKE</option>
+                                <option value="NOT LIKE">NOT LIKE</option>
+                                <option value="IN">IN</option>
+                                <option value="NOT IN">NOT IN</option>
+                                <option value="IS NULL">IS NULL</option>
+                                <option value="IS NOT NULL">IS NOT NULL</option>
+                                <option value="BETWEEN">BETWEEN</option>
+                            </select>
+                            <input type="text" class="condition-value" placeholder="Value">
+                            <button class="remove-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    <button class="add-btn" id="add-condition">
+                        <i class="fas fa-plus"></i> Add Condition
+                    </button>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-object-group"></i>
+                        <h3>Grouping</h3>
+                    </div>
+                    <div id="groupby-container"></div>
+                    <button class="add-btn" id="add-groupby">
+                        <i class="fas fa-plus"></i> Add GROUP BY
+                    </button>
+                    <div class="form-group" style="margin-top:16px;">
+                        <label for="having-clause">HAVING Clause</label>
+                        <input id="having-clause" placeholder="e.g., COUNT(*) > 5">
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-sort"></i>
+                        <h3>Sorting</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="sort-column">Sort By</label>
+                        <input id="sort-column" placeholder="Column to sort by">
+                    </div>
+                    <div class="form-group">
+                        <label for="sort-direction">Direction</label>
+                        <select id="sort-direction">
+                            <option value="ASC">Ascending (A-Z)</option>
+                            <option value="DESC">Descending (Z-A)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="limit-value">Limit</label>
+                        <input id="limit-value" type="number" placeholder="e.g., 10">
+                    </div>
+                    <div class="form-group">
+                        <label for="offset-value">Offset</label>
+                        <input id="offset-value" type="number" placeholder="e.g., 0">
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn" id="generate-sql">
+                        <i class="fas fa-code"></i> Generate SQL
+                    </button>
+                    <button class="btn btn-secondary" id="reset-query">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- CREATE TABLE Builder -->
+            <div class="query-builder" id="create-query" style="display: none;">
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-table"></i>
+                        <h3>Table Definition</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="create-database">Database</label>
+                        <input id="create-database" placeholder="Enter dataBase's Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="table-name">Table Name</label>
+                        <input type="text" id="table-name" placeholder="Enter table name">
+                    </div>
+                    <div class="form-group">
+                        <label for="table-engine">Engine</label>
+                        <select id="table-engine">
+                            <option value="InnoDB">InnoDB</option>
+                            <option value="MyISAM">MyISAM</option>
+                            <option value="MEMORY">MEMORY</option>
+                            <option value="ARCHIVE">ARCHIVE</option>
+                        </select>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="if-not-exists">
+                        <label for="if-not-exists">IF NOT EXISTS</label>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-columns"></i>
+                        <h3>Columns</h3>
+                    </div>
+                    <div id="create-columns-container">
+                        <div class="column-row">
+                            <input type="text" class="column-name" placeholder="Column name">
+                            <select class="column-type">
+                                <option value="INT">INT</option>
+                                <option value="VARCHAR">VARCHAR</option>
+                                <option value="TEXT">TEXT</option>
+                                <option value="DATE">DATE</option>
+                                <option value="DATETIME">DATETIME</option>
+                                <option value="TIMESTAMP">TIMESTAMP</option>
+                                <option value="DECIMAL">DECIMAL</option>
+                                <option value="FLOAT">FLOAT</option>
+                                <option value="DOUBLE">DOUBLE</option>
+                                <option value="BOOLEAN">BOOLEAN</option>
+                                <option value="BLOB">BLOB</option>
+                                <option value="JSON">JSON</option>
+                                <option value="ENUM">ENUM</option>
+                            </select>
+                            <input type="text" class="column-length" placeholder="Length" style="width: 80px;">
+                            <div>
+                                <input type="checkbox" class="column-pk" id="pk-1">
+                                <label for="pk-1" style="display: inline;">PK</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" class="column-null" id="null-1" checked>
+                                <label for="null-1" style="display: inline;">NULL</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" class="column-ai" id="ai-1">
+                                <label for="ai-1" style="display: inline;">AI</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" class="column-unique" id="uq-1">
+                                <label for="uq-1" style="display: inline;">UQ</label>
+                            </div>
+                            <input type="text" class="column-default" placeholder="Default" style="width: 100px;">
+                            <button class="remove-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    <button class="add-btn" id="add-create-column">
+                        <i class="fas fa-plus"></i> Add Column
+                    </button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn" id="generate-create-sql">
+                        <i class="fas fa-code"></i> Generate SQL
+                    </button>
+                    <button class="btn btn-secondary" id="reset-create-query">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- ALTER TABLE Builder -->
+            <div class="query-builder" id="alter-query" style="display: none;">
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-table"></i>
+                        <h3>Table Selection</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="alter-database">Database</label>
+                        <input id="alter-database" placeholder="Enter DataBase's Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="alter-table-name">Table Name</label>
+                        <input id="alter-table-name" placeholder="Enter table's Name">
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-wrench"></i>
+                        <h3>Operations</h3>
+                    </div>
+                    <div id="alter-operations-container">
+                        <div class="column-row">
+                            <select class="alter-action">
+                                <option value="ADD">ADD COLUMN</option>
+                                <option value="MODIFY">MODIFY COLUMN</option>
+                                <option value="CHANGE">CHANGE COLUMN</option>
+                                <option value="DROP">DROP COLUMN</option>
+                                <option value="RENAME">RENAME COLUMN</option>
+                            </select>
+                            <input class="alter-column" placeholder="Column name">
+                            <input class="alter-new-column" placeholder="New name (for CHANGE/RENAME)">
+                            <select class="alter-type">
+                                <option value="">Type</option>
+                                <option value="INT">INT</option>
+                                <option value="VARCHAR(255)">VARCHAR(255)</option>
+                                <option value="TEXT">TEXT</option>
+                                <option value="DATE">DATE</option>
+                                <option value="DATETIME">DATETIME</option>
+                                <option value="DECIMAL(10,2)">DECIMAL(10,2)</option>
+                                <option value="BOOLEAN">BOOLEAN</option>
+                            </select>
+                            <div>
+                                <input type="checkbox" class="alter-null" checked>
+                                <label style="display: inline;">NULL</label>
+                            </div>
+                            <button class="remove-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    <button class="add-btn" id="add-alter-operation">
+                        <i class="fas fa-plus"></i> Add Operation
+                    </button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn" id="generate-alter-sql">
+                        <i class="fas fa-code"></i> Generate SQL
+                    </button>
+                    <button class="btn btn-secondary" id="reset-alter-query">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- CREATE VIEW Builder -->
+            <div class="query-builder" id="view-query" style="display: none;">
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-eye"></i>
+                        <h3>View Definition</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="view-database">Database</label>
+                        <input id="view-database" placeholder="Enter DataBase's Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="view-name">View Name</label>
+                        <input id="view-name" placeholder="Enter view name">
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="or-replace">
+                        <label for="or-replace">OR REPLACE</label>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-code"></i>
+                        <h3>SELECT Query</h3>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="view-query-text" placeholder="Enter your SELECT query here..." rows="8"></textarea>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn" id="generate-view-sql">
+                        <i class="fas fa-code"></i> Generate SQL
+                    </button>
+                    <button class="btn btn-secondary" id="reset-view-query">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- INSERT Query Builder -->
+            <div class="query-builder" id="insert-query" style="display: none;">
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-table"></i>
+                        <h3>Table Selection</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="insert-database">Database</label>
+                        <input id="insert-database" placeholder="Enter DataBase's Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="insert-table">Table</label>
+                        <input id="insert-table" placeholder="Enter table's Name">
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-columns"></i>
+                        <h3>Column-Value Pairs</h3>
+                    </div>
+                    <div id="insert-columns-container">
+                        <div class="column-row">
+                            <input class="insert-column" placeholder="Column name">
+                            <input class="insert-value" placeholder="Value">
+                            <button class="remove-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    <button class="add-btn" id="add-insert-column">
+                        <i class="fas fa-plus"></i> Add Column-Value Pair
+                    </button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn" id="generate-insert-sql">
+                        <i class="fas fa-code"></i> Generate SQL
+                    </button>
+                    <button class="btn btn-secondary" id="reset-insert-query">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- UPDATE Query Builder -->
+            <div class="query-builder" id="update-query" style="display: none;">
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-table"></i>
+                        <h3>Table Selection</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="update-database">Database</label>
+                        <input id="update-database" placeholder="Enter DataBase's Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="update-table">Table</label>
+                        <input id="update-table" placeholder="Enter table's Name">
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-pen"></i>
+                        <h3>SET Clauses</h3>
+                    </div>
+                    <div id="update-set-container">
+                        <div class="column-row">
+                            <input class="update-column" placeholder="Column name">
+                            <input class="update-value" placeholder="New value">
+                            <button class="remove-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    <button class="add-btn" id="add-update-set">
+                        <i class="fas fa-plus"></i> Add SET Clause
+                    </button>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-filter"></i>
+                        <h3>Conditions</h3>
+                    </div>
+                    <div id="update-conditions-container">
+                        <div class="condition-row">
+                            <input class="condition-column" placeholder="Column's Name for Conditions">
+                            <select class="condition-operator">
+                                <option value="=">=</option>
+                                <option value="!=">!=</option>
+                                <option value="<">&lt;</option>
+                                <option value=">">&gt;</option>
+                                <option value="<=">&lt;=</option>
+                                <option value=">=">&gt;=</option>
+                                <option value="LIKE">LIKE</option>
+                            </select>
+                            <input type="text" class="condition-value" placeholder="Value">
+                            <button class="remove-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    <button class="add-btn" id="add-update-condition">
+                        <i class="fas fa-plus"></i> Add Condition
+                    </button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn" id="generate-update-sql">
+                        <i class="fas fa-code"></i> Generate SQL
+                    </button>
+                    <button class="btn btn-secondary" id="reset-update-query">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- DELETE Query Builder -->
+            <div class="query-builder" id="delete-query" style="display: none;">
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-table"></i>
+                        <h3>Table Selection</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="delete-database">Database</label>
+                        <input id="delete-database" placeholder="Enter DataBase's Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="delete-table">Table</label>
+                        <input id="delete-table" placeholder="Enter table's Name">
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-filter"></i>
+                        <h3>Conditions</h3>
+                    </div>
+                    <div id="delete-conditions-container">
+                        <div class="condition-row">
+                            <input class="condition-column" placeholder="Column's Name for Conditions">
+                            <select class="condition-operator">
+                                <option value="=">=</option>
+                                <option value="!=">!=</option>
+                                <option value="<">&lt;</option>
+                                <option value=">">&gt;</option>
+                                <option value="<=">&lt;=</option>
+                                <option value=">=">&gt;=</option>
+                                <option value="LIKE">LIKE</option>
+                                <option value="IN">IN</option>
+                            </select>
+                            <input type="text" class="condition-value" placeholder="Value">
+                            <button class="remove-btn"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    <button class="add-btn" id="add-delete-condition">
+                        <i class="fas fa-plus"></i> Add Condition
+                    </button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn" id="generate-delete-sql">
+                        <i class="fas fa-code"></i> Generate SQL
+                    </button>
+                    <button class="btn btn-secondary" id="reset-delete-query">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <!-- SQL Preview -->
+            <div class="section" id="sql-preview-section" style="display: none;">
+                <div class="section-header">
+                    <i class="fas fa-code"></i>
+                    <h3>Generated SQL</h3>
+                    <button class="copy-btn" id="copy-sql" style="margin-left:auto;">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+                <div class="sql-preview" id="sql-preview">
+                    Your SQL query will appear here
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
