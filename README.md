@@ -1,13 +1,28 @@
 # SQL Query Builder
 
 A simple web application for building SQL queries with a user-friendly interface.
-![SS-c](ScreenshotCreate.png)
-![SS-s](ScreenshotSelect.png)
+![SS-c](ScreenShot.png)
+
 ## Features
 
 - **Two Query Types**:
-  - SELECT queries with conditions and sorting
-  - CREATE TABLE queries with column definitions
+## Features
+
+This application supports the generation of various SQL statement types, categorized into two main groups:
+
+* **DDL (Data Definition Language):**
+* SELECT Query
+* CREATE TABLE
+* ALTER TABLE
+* CREATE VIEW
+
+
+* **DML (Data Manipulation Language):**
+* INSERT Query
+* UPDATE Query
+* DELETE Query
+
+
 
 - **User-Friendly Interface**:
   - Clean, modern design with gradient colors
@@ -19,13 +34,5 @@ A simple web application for building SQL queries with a user-friendly interface
   - Specify data types and constraints for CREATE TABLE
   - Copy generated SQL to clipboard
 
-## How to Use
-
-1. Select query type (SELECT or CREATE) from the sidebar
-2. Fill in the required fields:
-   - For SELECT: database, table, columns, conditions, sorting
-   - For CREATE: database, table name, column definitions
-3. Click "Generate SQL" to create your query
-4. Copy the SQL using the copy button
 
 By [DangerousAngel](https://github.com/DangerousAngel/)
